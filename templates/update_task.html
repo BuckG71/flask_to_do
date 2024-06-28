@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Update Task{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Update Task</h1>
+<form id="updateForm" class="bg-white p-4 rounded-lg shadow">
+    <input type="hidden" id="task_id" name="task_id" value="{{ task.id }}">
+    <label for="new_task" class="block text-sm font-medium text-gray-700">New Task:</label>
+    <input type="text" id="new_task" name="new_task" value="{{ task.description }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+    <div class="mt-4">
+        <button type="button" onclick="updateTask()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Update Task</button>
+    </div>
+</form>
+<a href="/tasks" class="block mt-4 text-blue-500 hover:underline">Back to task list</a>
+
+<script>
+    function updateTask() {
+        const taskId = document.getElementById('task_id').value;
+        const newTaskDescription = document.getElementById('new_task').value;
+        const url = `/tasks/${taskId}/update`;
+
+        console.log(`Sending PUT request to URL: ${url}`);
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ new_task: newTaskDescription }),
+        })
+        .then(response => {
+            console.log(`Response status: ${response.status}`);
+            if (response.ok) {
+                window.location.href = '/tasks';
+            } else {
+                console.error('Update failed');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+{% endblock %}

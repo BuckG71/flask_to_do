@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Task List{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-4">Task List</h1>
+<ul class="bg-white rounded-lg shadow divide-y divide-gray-200">
+    {% for task in tasks %}
+        <li class="p-4 flex justify-between items-center">
+            {{ task.description }}
+            <span class="flex space-x-2">
+                <form action="/tasks/{{ task.id }}/delete" method="post" class="inline">
+                    <input type="hidden" name="task_id" value="{{ task.id }}">
+                    <input type="submit" value="Delete" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">
+                </form>
+                <a href="/tasks/{{ task.id }}/update" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Update</a>
+            </span>
+        </li>
+    {% endfor %}
+</ul>
+<a href="/add" class="bg-green-500 text-white px-4 py-2 rounded mt-4 inline-block hover:bg-green-700">Add a new task</a>
+{% endblock %}
